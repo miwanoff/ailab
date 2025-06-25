@@ -84,6 +84,7 @@
             border-radius: 20px;
             line-height: 1.6;
             font-size: 16px;
+            word-wrap: break-word;
         }
 
         /* Повідомлення користувача */
@@ -171,7 +172,7 @@
         </form>
     </div>
 
-     <!-- Підключення Gemini API SDK -->
+    <!-- Підключення Gemini API SDK -->
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
@@ -179,7 +180,7 @@
 
         // 1. ВАШ КЛЮЧ API
         // TODO: Вставте свій API-ключ, отриманий з Google AI Studio.
-        const API_KEY = "AIzaSyDzdFO-kRDj6NenIHjfHDWcQcS8lIfoXpA";
+        const API_KEY = "";
 
         // 2. ІНФОРМАЦІЯ ПРО ВАШ СТАРТАП ДЛЯ БОТА
         const businessInfo = `
@@ -210,23 +211,12 @@
 
         // --- КІНЕЦЬ КОНФІГУРАЦІЇ ---
 
-        // Історія чату для API, що містить системні інструкції.
-        // Ця частина не відображається користувачу, а лише "навчає" модель.
-        const chatHistoryForApi = [
-            {
-                role: "user",
-                parts: [{ text: `Запам'ятай інструкцію: ${businessInfo}\n\nТепер ти готовий відповідати на запитання.` }],
-            },
-            {
-                role: "model",
-                parts: [{ text: "Добре, я готовий. Я – дружній та експертний чат-бот-помічник для стартапу \"AI Лаб\"." }],
-            }
-        ];
-
         const chatMessages = document.getElementById('chat-messages');
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         
+        let chat;
+
         // Функція для відображення повідомлення в інтерфейсі
         function displayMessage(role, text) {
             const messageDiv = document.createElement('div');
@@ -259,10 +249,26 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Ініціалізація чату: відображення початкового привітання
+        // Ініціалізація чату: створення сесії та відображення початкового привітання
         function initializeChat() {
+            chat = model.startChat({
+                history: [
+                    {
+                        role: "user",
+                        parts: [{ text: `Запам'ятай інструкцію: ${businessInfo}\n\nТепер ти готовий відповідати на запитання.` }],
+                    },
+                    {
+                        role: "model",
+                        parts: [{ text: "Добре, я готовий. Я – дружній та експертний чат-бот-помічник для стартапу \"AI Лаб\"." }],
+                    }
+                ],
+                generationConfig: {
+                  maxOutputTokens: 1000,
+                },
+            });
+            
             chatMessages.innerHTML = '';
-             displayMessage('model', "Привіт! Я помічник AI Лаб. Чим можу допомогти? Запитай мене про наші курси, місію або як почати вчитися кодувати!");
+            displayMessage('model', "Привіт! Я помічник AI Лаб. Чим можу допомогти? Запитай мене про наші курси, місію або як почати вчитися кодувати!");
         }
         
         // Обробка відправки форми
@@ -282,24 +288,13 @@
             chatInput.value = '';
             showLoading();
 
-            // Додаємо повідомлення користувача до історії API
-            chatHistoryForApi.push({ role: "user", parts: [{ text: userMessage }] });
-
             try {
-                // Створення сесії чату з повною історією для API
-                const chat = model.startChat({
-                    history: chatHistoryForApi.slice(0, -1), // Вся історія, окрім останнього повідомлення користувача
-                    generationConfig: {
-                      maxOutputTokens: 1000,
-                    },
-                });
-
+                // Використовуємо існуючу сесію чату для надсилання повідомлення
                 const result = await chat.sendMessage(userMessage);
                 const response = result.response;
                 const text = response.text();
 
-                // Додаємо відповідь моделі до історії API та відображаємо її
-                chatHistoryForApi.push({ role: "model", parts: [{ text: text }] });
+                // Відображаємо відповідь моделі
                 hideLoading();
                 displayMessage('model', text);
 
@@ -316,4 +311,3 @@
     </script>
 </body>
 </html>
-
