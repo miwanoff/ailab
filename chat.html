@@ -190,6 +190,7 @@
         }
 
     </style>
+    <script src="https://sdk.gemini.ai/v1.1.0/gemini-ai.js"></script>
 </head>
 <body>
 
@@ -257,124 +258,104 @@
 
         // --- ЛОГІКА РОБОТИ ЧАТУ ---
 
-        // Зберігає історію діалогу для надсилання в API
-        let messages = [
-            {
-                role: 'user',
-                parts: [{ text: 'Привіт, розкажи про себе.' }],
-            },
-            {
-                role: 'model',
-                parts: [{ text: 'Привіт! Я асистент освітньої платформи "AI Лаб". Чим можу допомогти? Запитайте мене про наші курси, місію або цінності.' }],
+        // --- ЛОГІКА РОБОТИ ЧАТУ ---
+
+    let messages = [];
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+
+    // <<< ЗМІНИ ТУТ: Ініціалізація моделі винесена назовні >>>
+    const genAI = new google.generativeai.GoogleGenerativeAI(API_KEY);
+    const model = genAI.getGenerativeModel({
+        model: "gemini-pro",
+        systemInstruction: businessInfo,
+    });
+    const chat = model.startChat({
+        history: messages
+    });
+
+
+    sendButton.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function displayMessage(sender, text) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        messageElement.innerHTML = text;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    
+    function toggleTypingIndicator(show) {
+        let indicator = document.getElementById('typing-indicator');
+        if (show) {
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'typing-indicator';
+                indicator.classList.add('message', 'bot-message', 'typing-indicator');
+                indicator.textContent = 'AI Лаб друкує...';
+                chatBox.appendChild(indicator);
+                chatBox.scrollTop = chatBox.scrollHeight;
             }
-        ];
-
-        const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
-        const sendButton = document.getElementById('send-button');
-
-        // Обробники подій
-        sendButton.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                sendMessage();
+        } else {
+            if (indicator) {
+                indicator.remove();
             }
-        });
+        }
+    }
 
-        // Функція для відображення повідомлення у чаті
-        function displayMessage(sender, text) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+    async function sendMessage() {
+        const userText = userInput.value.trim();
+        if (userText === '') return;
+
+        displayMessage('user', userText);
+        userInput.value = '';
+        toggleTypingIndicator(true);
+
+        try {
+            // <<< ЗМІНИ ТУТ: Виклик функції API тепер активний >>>
+            const botResponse = await getGeminiResponse(userText);
             
-            // Проста обробка markdown для жирного тексту
-            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            messageElement.innerHTML = text;
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            toggleTypingIndicator(false);
+            displayMessage('bot', botResponse);
+
+            // Оновлюємо історію після отримання відповідей
+            messages.push({ role: 'user', parts: [{ text: userText }] });
+            messages.push({ role: 'model', parts: [{ text: botResponse }] });
+
+        } catch (error) {
+            console.error("Error:", error);
+            toggleTypingIndicator(false);
+            displayMessage('bot', 'Вибачте, сталася помилка. Перевірте консоль (F12) на наявність помилок API.');
+        }
+    }
+
+    async function getGeminiResponse(userMessage) {
+        if (API_KEY === "YOUR_API_KEY") {
+            return "Будь ласка, вставте ваш справжній API-ключ у константу API_KEY у коді.";
         }
         
-        // Функція для відображення/видалення індикатора набору тексту
-        function toggleTypingIndicator(show) {
-            let indicator = document.getElementById('typing-indicator');
-            if (show) {
-                if (!indicator) {
-                    indicator = document.createElement('div');
-                    indicator.id = 'typing-indicator';
-                    indicator.classList.add('message', 'bot-message', 'typing-indicator');
-                    indicator.textContent = 'AI Лаб друкує...';
-                    chatBox.appendChild(indicator);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }
-            } else {
-                if (indicator) {
-                    indicator.remove();
-                }
-            }
-        }
+        // <<< ЗМІНИ ТУТ: Цей код тепер виконується >>>
+        const result = await chat.sendMessage(userMessage);
+        const response = await result.response;
+        const text = response.text();
+        
+        return text;
+    }
+    
+    // Відображення початкового повідомлення після завантаження сторінки
+    window.addEventListener('load', () => {
+        const initialBotMessage = "<strong>Привіт!</strong> Я асистент освітньої платформи \"AI Лаб\". Чим можу допомогти? Запитайте мене про наші курси, місію або цінності.";
+        displayMessage('bot', initialBotMessage);
+        messages.push({ role: 'model', parts: [{ text: initialBotMessage }] });
+    });
 
-
-        // Основна функція відправки повідомлення
-        async function sendMessage() {
-            const userText = userInput.value.trim();
-            if (userText === '') return;
-
-            displayMessage('user', userText);
-            userInput.value = '';
-            toggleTypingIndicator(true);
-
-            // Додаємо повідомлення користувача в історію
-            messages.push({ role: 'user', parts: [{ text: userText }] });
-
-            try {
-                const botResponse = await getGeminiResponse(userText);
-                
-                // Додаємо відповідь бота в історію
-                messages.push({ role: 'model', parts: [{ text: botResponse }] });
-
-                toggleTypingIndicator(false);
-                displayMessage('bot', botResponse);
-            } catch (error) {
-                console.error("Error:", error);
-                toggleTypingIndicator(false);
-                displayMessage('bot', 'Вибачте, сталася помилка. Спробуйте ще раз пізніше.');
-            }
-        }
-
-        // Функція для отримання відповіді від Gemini API
-        async function getGeminiResponse(userMessage) {
-            if (API_KEY === "YOUR_API_KEY") {
-                return "Будь ласка, вставте ваш справжній API-ключ у константу API_KEY у коді.";
-            }
-
-            // На цьому місці буде реальний запит до API Google
-            // Для цього потрібно імпортувати GoogleGenerativeAI з SDK:
-            // import { GoogleGenerativeAI } from "@google/generative-ai";
-            
-            // Код нижче є прикладом того, як це має виглядати
-            /*
-            const { GoogleGenerativeAI } = await import('https://esm.run/@google/generative-ai');
-            const actualGenAI = new GoogleGenerativeAI(API_KEY);
-            
-            const actualModel = actualGenAI.getGenerativeModel({
-                model: "gemini-pro",
-                systemInstruction: businessInfo,
-            });
-
-            const chat = actualModel.startChat({
-                history: messages.slice(0, -1) // Надсилаємо історію без останнього повідомлення користувача
-            });
-
-            const result = await chat.sendMessage(userMessage);
-            const response = await result.response;
-            const text = response.text();
-            
-            return text;
-            */
-            
-            // Повертаємо заглушку, оскільки реальний виклик API закоментовано
-            return new Promise(resolve => setTimeout(() => resolve("Дякую за ваше запитання! Я використовую інформацію про 'AI Лаб' для формування змістовної відповіді."), 1500));
-        }
 
     </script>
 </body>
