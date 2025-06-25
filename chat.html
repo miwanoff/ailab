@@ -213,22 +213,8 @@
         // --- КОНФІГУРАЦІЯ API ТА БІЗНЕС-ІНФОРМАЦІЇ ---
         
         // ВАЖЛИВО: Замініть "YOUR_API_KEY" на ваш справжній ключ Google AI Studio.
-        const API_KEY = "AIzaSyDzdFO-kRDj6NenIHjfHDWcQcS8lIfoXpA";
-        
-        // Це умовні змінні для ініціалізації моделі, як ви просили.
-        // У реальному коді ви б імпортували їх з бібліотеки Google.
-        const genAI = { 
-            getGenerativeModel: (config) => ({ 
-                startChat: (chatConfig) => ({
-                    sendMessage: async (message) => {
-                        // Це імітація відповіді. Реальна логіка буде в getGeminiResponse.
-                        console.log("Message sent to mock API:", message);
-                        return { response: { text: () => "Це імітована відповідь. Налаштуйте справжній API." } };
-                    }
-                })
-            }) 
-        };
-        const model = { name: "gemini-pro" };
+        const API_KEY = "AIzaSyDzdFO-kRDj6NenIHjfHDWcQcS8lIfoXpA";       
+
 
         /**
          * Інформація про стартап для system_instruction.
@@ -255,8 +241,6 @@
 
             Твоє завдання — відповідати на запитання користувачів, спираючись на цю інформацію. Будь сучасним, привабливим для підлітків, але надійним в очах їхніх батьків. 
         `;
-
-        // --- ЛОГІКА РОБОТИ ЧАТУ ---
 
         // --- ЛОГІКА РОБОТИ ЧАТУ ---
 
