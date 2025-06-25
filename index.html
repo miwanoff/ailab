@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Лаб: курси програмування та штучного інтелекту для підлітків. Навчання кодуванню та AI для майбутніх інноваторів.">
+    <meta name="keywords" content="програмування для підлітків, курси AI, штучний інтелект для дітей, навчання кодуванню, освіта з програмування, IT для підлітків, цифрові навички, майбутнє в IT, онлайн-курси AI, технології для молоді">
+    <title>AI Лаб - Твори Своє Цифрове Майбутнє</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Favicon (Можна замінити на власний SVG або інший формат) -->
+    <link rel="icon" href="https://placehold.co/32x32/6A0DAD/F5F5F5?text=AI" type="image/png">
+    <!-- Custom CSS -->
+    <style>
+        /* Визначення змінних для кольорової палітри */
+        :root {
+            --primary-indigo: #6A0DAD; /* Магічний Індиго */
+            --secondary-blue: #00BFFF; /* Техно-Блакитний */
+            --accent-lime: #A7FF00;    /* Яскравий Лайм */
+            --neutral-light-gray: #F5F5F5; /* Хмарний Світло-Сірий */
+            --neutral-dark-gray: #1A1A1A; /* Глибокий Космічний Сірий */
+            --text-opacity-70: rgba(26, 26, 26, 0.7); /* Глибокий Космічний Сірий з прозорістю */
+        }
+
+        /* Загальні стилі для тіла сторінки */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--neutral-dark-gray);
+            background-color: var(--neutral-light-gray);
+            line-height: 1.6em; /* Оптимальний міжрядковий інтервал для читабельності */
+        }
+
+        /* Стилі для заголовків */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-indigo);
+            margin-bottom: 0.5em; /* Відступ під заголовком */
+            margin-top: 1.5em;    /* Відступ над заголовком */
+            line-height: 1.2em;   /* Щільніший міжрядковий інтервал для заголовків */
+        }
+
+        h1 {
+            font-size: 48px; /* Розмір для десктопу */
+            font-weight: 800; /* ExtraBold */
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px; /* Розмір для мобільних пристроїв */
+            }
+        }
+
+        h2 {
+            font-size: 36px; /* Розмір для десктопу */
+            font-weight: 600; /* SemiBold */
+        }
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 28px; /* Розмір для мобільних пристроїв */
+            }
+        }
+
+        h3 {
+            font-size: 24px; /* Розмір для десктопу */
+            font-weight: 500; /* Medium */
+        }
+        @media (max-width: 768px) {
+            h3 {
+                font-size: 20px; /* Розмір для мобільних пристроїв */
+            }
+        }
+
+        p {
+            font-size: 18px; /* Розмір для десктопу */
+            font-weight: 400; /* Regular */
+            margin-bottom: 1em; /* Відступ між параграфами */
+        }
+        @media (max-width: 768px) {
+            p {
+                font-size: 16px; /* Розмір для мобільних пристроїв */
+            }
+        }
+
+        /* Стиль для підписів/дрібного тексту */
+        .caption-text {
+            font-size: 14px; /* Розмір для десктопу */
+            font-weight: 400; /* Regular */
+            color: var(--text-opacity-70);
+            line-height: 1.4em;
+        }
+        @media (max-width: 768px) {
+            .caption-text {
+                font-size: 12px; /* Розмір для мобільних пристроїв */
+            }
+        }
+
+        /* Стилі для кнопок */
+        .btn-primary {
+            background-color: var(--primary-indigo);
+            border-color: var(--primary-indigo);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600; /* SemiBold */
+            padding: 12px 24px;
+            border-radius: 8px; /* Заокруглені кути */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #550AA0; /* Темніший відтінок індиго для hover */
+            border-color: #550AA0;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #0099CC; /* Темніший відтінок синього для hover */
+            border-color: #0099CC;
+        }
+
+        /* Стилі для посилань */
+        a {
+            color: var(--secondary-blue);
+            text-decoration: underline;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+        a:hover {
+            color: var(--accent-lime); /* Яскравий лайм на hover */
+            text-decoration: none;     /* Без підкреслення на hover */
+        }
+
+        /* Відступи для секцій */
+        section {
+            padding: 80px 0; /* Більший відступ для секцій */
+        }
+        @media (max-width: 768px) {
+            section {
+                padding: 40px 0; /* Менший відступ для мобільних */
+            }
+        }
+
+        /* Стилі для секції Hero */
+        .hero-section {
+            background: linear-gradient(to right, var(--primary-indigo), var(--secondary-blue)); /* Градієнтний фон */
+            color: #fff; /* Білий текст для контрасту */
+            padding: 120px 0;
+            text-align: center;
+        }
+        .hero-section h1, .hero-section p {
+            color: #fff; /* Забезпечення білого кольору тексту */
+        }
+        .hero-section .btn-primary {
+            background-color: var(--accent-lime); /* Кнопка в Hero Section акцентного кольору */
+            border-color: var(--accent-lime);
+            color: var(--neutral-dark-gray); /* Темний текст на лаймовому фоні */
+        }
+        .hero-section .btn-primary:hover {
+            background-color: #90E500; /* Темніший лайм для hover */
+            border-color: #90E500;
+        }
+
+        /* Стилі для карток */
+        .card {
+            background-color: #fff;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Легка тінь */
+            padding: 25px;
+            margin-bottom: 30px;
+            height: 100%; /* Забезпечити однакову висоту карток */
+        }
+
+        /* Стилі для іконок соціальних мереж */
+        .social-icon {
+            font-size: 28px; /* Більший розмір іконок */
+            color: var(--neutral-dark-gray);
+            margin: 0 12px; /* Більший відступ між іконками */
+            transition: color 0.3s ease;
+        }
+        .social-icon:hover {
+            color: var(--secondary-blue);
+        }
+
+        /* Навігаційна панель */
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--primary-indigo) !important;
+            font-size: 28px;
+        }
+        .navbar-nav .nav-link {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            color: var(--neutral-dark-gray) !important;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem; /* Відступи для посилань у навігації */
+        }
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--secondary-blue) !important;
+        }
+
+        /* Стиль для зображень-заповнювачів */
+        .img-fluid {
+            border-radius: 10px; /* Заокруглені кути для зображень */
+        }
+
+        /* Додаткові стилі для секцій */
+        .section-light {
+            background-color: var(--neutral-light-gray);
+        }
+        .section-dark {
+            background-color: var(--neutral-dark-gray);
+            color: #fff;
+        }
+        .section-dark h1, .section-dark h2, .section-dark h3, .section-dark p {
+            color: #fff;
+        }
+
+        .text-accent {
+            color: var(--accent-lime);
+        }
+        .text-secondary-blue {
+            color: var(--secondary-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- Навігаційна панель -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
+        <div class="container">
+            <!-- Бренд/Логотип -->
+            <a class="navbar-brand" href="index.html">AI Лаб</a>
+            <!-- Кнопка-перемикач для мобільних -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Пункти меню -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Головна</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">Про нас</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Курси</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Контакти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="chat.html">Чат-бот</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Секція Hero -->
+        <section class="hero-section d-flex align-items-center">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <h1 class="display-3 mb-4">AI Лаб: Твори Своє Цифрове Майбутнє з AI та Кодуванням!</h1>
+                        <p class="lead mb-5">Відкрий світ програмування та штучного інтелекту, що стає зрозумілим та захоплюючим! Ми навчаємо підлітків творити, експериментувати та бути на крок попереду в світі технологій.</p>
+                        <a href="courses.html" class="btn btn-primary btn-lg">Почни Свій AI Шлях Зараз!</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секція "Що ми пропонуємо" -->
+        <section class="section-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">AI Лаб: Твоя Лабораторія Інновацій та Знань</h2>
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <p>У AI Лаб ми перетворюємо складні концепції програмування та AI на захопливі "мікро-уроки", адаптовані саме для підлітків. Забудь про нудні лекції – на тебе чекають інтерактивні заняття, практичні проєкти та реальні кейси, що оживають просто в твоїх улюблених соцмережах.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fas fa-check-circle text-secondary-blue me-2"></i> **Адаптований контент:** Створено спеціально для підлітків, з урахуванням їхніх інтересів та потреб.</li>
+                            <li class="mb-3"><i class="fas fa-check-circle text-secondary-blue me-2"></i> **Мікро-уроки в соцмережах:** Навчання через YouTube, TikTok, Instagram – завжди з тобою, де б ти не був.</li>
+                            <li class="mb-3"><i class="fas fa-check-circle text-secondary-blue me-2"></i> **AI як інструмент навчання:** Використовуй штучний інтелект для вирішення завдань та створення власних проєктів.</li>
+                            <li class="mb-3"><i class="fas fa-check-circle text-secondary-blue me-2"></i> **Фокус на творчості:** Ми не просто вчимо код, а запалюємо іскру креативності та допомагаємо реалізувати твій потенціал.</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://placehold.co/600x400/6A0DAD/F5F5F5?text=AI+Lab+Innovation" alt="Зображення: Лабораторія інновацій AI Лаб" class="img-fluid shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секція "Наші Курси" (огляд) -->
+        <section class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Розпочни Свою Пригоду: Курси Програмування та AI</h2>
+                <p class="lead text-center mb-5">Занурся у світ технологій майбутнього з нашими практичними онлайн-курсами.</p>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                    <!-- Картка Курсу 1 -->
+                    <div class="col">
+                        <div class="card h-100 text-center">
+                            <img src="https://placehold.co/150x150/00BFFF/F5F5F5?text=AI" class="card-img-top mx-auto mt-3" alt="Зображення: Іконка курсу Вступ до AI">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="card-title">Вступ до AI та Машинного Навчання</h3>
+                                <p class="card-text caption-text">Дізнайся: Як працює штучний інтелект, створюй прості нейронні мережі та навчись основам аналізу даних.</p>
+                                <div class="mt-auto">
+                                    <a href="courses.html#ai-intro" class="btn btn-secondary mt-3">Детальніше</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Картка Курсу 2 -->
+                    <div class="col">
+                        <div class="card h-100 text-center">
+                            <img src="https://placehold.co/150x150/A7FF00/1A1A1A?text=Python" class="card-img-top mx-auto mt-3" alt="Зображення: Іконка курсу Python">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="card-title">Python для Початківців: Творимо та Кодуємо</h3>
+                                <p class="card-text caption-text">Дізнайся: Освої основні концепції Python, створюй свої перші програми та розробляй міні-ігри.</p>
+                                <div class="mt-auto">
+                                    <a href="courses.html#python-basics" class="btn btn-secondary mt-3">Детальніше</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Картка Курсу 3 -->
+                    <div class="col">
+                        <div class="card h-100 text-center">
+                            <img src="https://placehold.co/150x150/6A0DAD/F5F5F5?text=ChatBot" class="card-img-top mx-auto mt-3" alt="Зображення: Іконка курсу Чат-боти">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="card-title">Створення Чат-ботів та AI Асистентів</h3>
+                                <p class="card-text caption-text">Дізнайся: Як розробити свого чат-бота, що розуміє людську мову, та інтегрувати його у веб-платформи.</p>
+                                <div class="mt-auto">
+                                    <a href="courses.html#chatbots" class="btn btn-secondary mt-3">Детальніше</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Картка Курсу 4 -->
+                    <div class="col">
+                        <div class="card h-100 text-center">
+                            <img src="https://placehold.co/150x150/1A1A1A/A7FF00?text=WebDev" class="card-img-top mx-auto mt-3" alt="Зображення: Іконка курсу Веб-розробка">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="card-title">Веб-Розробка для Майбутнього: HTML, CSS, JS</h3>
+                                <p class="card-text caption-text">Дізнайся: Створюй інтерактивні веб-сайти, освоюй основи фронтенду та готуйся до кар'єри веб-розробника.</p>
+                                <div class="mt-auto">
+                                    <a href="courses.html#web-dev" class="btn btn-secondary mt-3">Детальніше</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5">
+                    <a href="courses.html" class="btn btn-primary btn-lg">Переглянути Всі Курси</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секція "Чому AI Лаб?" -->
+        <section class="section-dark py-5 text-center">
+            <div class="container">
+                <h2 class="mb-5 text-white">Наші Цінності: Надихаємо на Інновації</h2>
+                <p class="lead mb-5 text-white-50">Ми не просто навчаємо – ми формуємо нове покоління інноваторів та творців.</p>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card text-center h-100" style="background-color: var(--primary-indigo); color: #fff;">
+                            <div class="card-body">
+                                <i class="fas fa-lightbulb fa-3x mb-3 text-accent"></i>
+                                <h3 class="card-title text-white">Креативність та Експеримент</h3>
+                                <p class="card-text caption-text text-white-75">Заохочуємо сміливі ідеї, нестандартне мислення та вчимо через практику.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card text-center h-100" style="background-color: var(--primary-indigo); color: #fff;">
+                            <div class="card-body">
+                                <i class="fas fa-child fa-3x mb-3 text-accent"></i>
+                                <h3 class="card-title text-white">Доступність та Простота</h3>
+                                <p class="card-text caption-text text-white-75">Складні концепції стають зрозумілими та цікавими для будь-якого рівня підготовки.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card text-center h-100" style="background-color: var(--primary-indigo); color: #fff;">
+                            <div class="card-body">
+                                <i class="fas fa-rocket fa-3x mb-3 text-accent"></i>
+                                <h3 class="card-title text-white">Інноваційність та Майбутнє</h3>
+                                <p class="card-text caption-text text-white-75">Завжди на крок попереду, інтегруючи передові технології (як AI) у процес навчання.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card text-center h-100" style="background-color: var(--primary-indigo); color: #fff;">
+                            <div class="card-body">
+                                <i class="fas fa-chart-line fa-3x mb-3 text-accent"></i>
+                                <h3 class="card-title text-white">Розвиток та Ріст</h3>
+                                <p class="card-text caption-text text-white-75">Віримо в безперервне навчання та особистий прогрес кожного учня.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card text-center h-100" style="background-color: var(--primary-indigo); color: #fff;">
+                            <div class="card-body">
+                                <i class="fas fa-users fa-3x mb-3 text-accent"></i>
+                                <h3 class="card-title text-white">Спільнота</h3>
+                                <p class="card-text caption-text text-white-75">Будуємо підтримуюче середовище, де підлітки можуть ділитися ідеями та зростати разом.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Секція "Відгуки" -->
+        <section class="section-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Історії Успіху Наших Студентів</h2>
+                <p class="lead text-center mb-5">Послухай, що кажуть підлітки, які вже творять своє майбутнє з AI Лаб!</p>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <!-- Відгук 1 -->
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="https://placehold.co/80x80/00BFFF/F5F5F5?text=Д" alt="Аватар студента Данила" class="rounded-circle me-3">
+                                    <div>
+                                        <h4 class="mb-0" style="color: var(--primary-indigo);">Данило, 15 років</h4>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="fst-italic">"Завдяки AI Лаб я нарешті зрозумів Python! Інтерактивні уроки – це просто супер, а проекти реально захоплюють."</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Відгук 2 -->
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="https://placehold.co/80x80/A7FF00/1A1A1A?text=С" alt="Аватар студентки Софії" class="rounded-circle me-3">
+                                    <div>
+                                        <h4 class="mb-0" style="color: var(--primary-indigo);">Софія, 14 років</h4>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="fst-italic">"Я ніколи не думала, що AI може бути таким цікавим. Тепер планую створити власного чат-бота для школи!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секція "Зв'яжіться з Нами" (CTA) -->
+        <section class="bg-white py-5">
+            <div class="container text-center">
+                <h2 class="mb-4">Є Питання? Ми Готові Допомогти!</h2>
+                <p class="lead mb-5">Заповніть форму нижче, і наша команда зв'яжеться з вами найближчим часом.</p>
+                <a href="contact.html" class="btn btn-primary btn-lg">Зв'язатися з Нами</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-white text-center text-lg-start pt-4 pb-2 mt-5 shadow-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-3" style="color: var(--primary-indigo);">AI Лаб</h5>
+                    <p class="caption-text">
+                        Освітня платформа з програмування та AI для підлітків, що поєднує інновації, креативність, технологічність та доступність.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-3" style="color: var(--primary-indigo);">Посилання</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="about.html" class="text-decoration-none">Про нас</a></li>
+                        <li><a href="courses.html" class="text-decoration-none">Курси</a></li>
+                        <li><a href="contact.html" class="text-decoration-none">Контакти</a></li>
+                        <li><a href="privacy.html" class="text-decoration-none">Політика конфіденційності</a></li>
+                        <li><a href="terms.html" class="text-decoration-none">Умови використання</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-3" style="color: var(--primary-indigo);">Слідкуйте за нами</h5>
+                    <div class="d-flex justify-content-center justify-content-lg-start">
+                        <a href="https://youtube.com" class="social-icon" target="_blank" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://tiktok.com" class="social-icon" target="_blank" aria-label="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="https://instagram.com" class="social-icon" target="_blank" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3 caption-text" style="background-color: rgba(0, 0, 0, 0.02);">
+            © 2025 AI Лаб. Всі права захищено.
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome для іконок (Замініть на ваш власний Kit ID!) -->
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат з асистентом AI Лаб</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ОСНОВНІ СТИЛІ ТА КОЛЬОРИ ЗГІДНО ЗІ СТАЙЛ-ГАЙДОМ --- */
+        :root {
+            --primary-indigo: #6A0DAD; /*  */
+            --secondary-blue: #00BFFF; /*  */
+            --accent-lime: #A7FF00; /*  */
+            --neutral-light-gray: #F5F5F5; /*  */
+            --neutral-dark-gray: #1A1A1A; /*  */
+            
+            --font-headings: 'Montserrat', sans-serif; /*  */
+            --font-body: 'Open Sans', sans-serif; /*  */
+
+            --line-height-body: 1.6em; /*  */
+        }
+
+        /* --- Загальні стилі сторінки --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--neutral-dark-gray); /*  */
+            color: var(--neutral-light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* --- Контейнер чату --- */
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            background-color: #2a2a30; /* Трохи світліший відтінок фону */
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--primary-indigo);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- Заголовок чату --- */
+        .chat-header {
+            padding: 20px;
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 1px solid var(--primary-indigo);
+        }
+
+        .chat-header h1 {
+            font-family: var(--font-headings);
+            font-size: 24px; /*  */
+            font-weight: 700; /*  */
+            color: var(--neutral-light-gray);
+            text-align: center;
+        }
+
+        .chat-header h1 span {
+            color: var(--secondary-blue); /*  */
+        }
+
+        /* --- Область для повідомлень --- */
+        #chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            line-height: var(--line-height-body); /*  */
+            font-size: 16px; /*  */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Повідомлення від користувача */
+        .user-message {
+            background: linear-gradient(135deg, var(--secondary-blue), #00a0cc);
+            color: var(--neutral-dark-gray); /*  */
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Повідомлення від бота */
+        .bot-message {
+            background-color: var(--neutral-light-gray); /*  */
+            color: var(--neutral-dark-gray); /*  */
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .bot-message strong, .bot-message b {
+             font-family: var(--font-headings);
+             color: var(--primary-indigo); /*  */
+        }
+        
+        .bot-message a {
+            color: var(--secondary-blue); /*  */
+        }
+
+        /* --- Область вводу --- */
+        .chat-input-area {
+            display: flex;
+            padding: 20px;
+            border-top: 1px solid var(--primary-indigo);
+            background-color: rgba(0,0,0,0.2);
+            gap: 15px;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: var(--neutral-light-gray);
+            font-family: var(--font-body);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        #user-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+        }
+
+        #send-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--accent-lime); /*  */
+            color: var(--neutral-dark-gray); /*  */
+            font-family: var(--font-headings); /*  */
+            font-size: 16px;
+            font-weight: 700; /*  */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        #send-button:hover {
+            background-color: #c4ff4d;
+        }
+        
+        #send-button:active {
+            transform: scale(0.98);
+        }
+        
+        /* Стилізація скролбару */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2a2a30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-blue);
+            border-radius: 10px;
+            border: 2px solid #2a2a30;
+        }
+        
+        /* Клас для індикатора завантаження */
+        .typing-indicator {
+            align-self: flex-start;
+            color: #aaa;
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <header class="chat-header">
+            <h1><span>AI Лаб</span> Асистент</h1>
+        </header>
+        <div id="chat-box">
+             <div class="message bot-message">
+                <strong>Привіт!</strong> Я асистент освітньої платформи "AI Лаб". Чим можу допомогти? Запитайте мене про наші курси, місію або цінності.
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="Напишіть ваше повідомлення...">
+            <button id="send-button">Надіслати</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- КОНФІГУРАЦІЯ API ТА БІЗНЕС-ІНФОРМАЦІЇ ---
+        
+        // ВАЖЛИВО: Замініть "YOUR_API_KEY" на ваш справжній ключ Google AI Studio.
+        const API_KEY = "AIzaSyDzdFO-kRDj6NenIHjfHDWcQcS8lIfoXpA";
+        
+        // Це умовні змінні для ініціалізації моделі, як ви просили.
+        // У реальному коді ви б імпортували їх з бібліотеки Google.
+        const genAI = { 
+            getGenerativeModel: (config) => ({ 
+                startChat: (chatConfig) => ({
+                    sendMessage: async (message) => {
+                        // Це імітація відповіді. Реальна логіка буде в getGeminiResponse.
+                        console.log("Message sent to mock API:", message);
+                        return { response: { text: () => "Це імітована відповідь. Налаштуйте справжній API." } };
+                    }
+                })
+            }) 
+        };
+        const model = { name: "gemini-pro" };
+
+        /**
+         * Інформація про стартап для system_instruction.
+         * Цей текст надає Gemini контекст про компанію для більш точних відповідей.
+         * 
+         */
+        const businessInfo = `
+            Ти — корисний, доброзичливий і трохи креативний чат-асистент освітньої платформи для підлітків "AI Лаб". Ти спілкуєшся українською мовою.
+
+            Ось ключова інформація про наш бренд, яку ти маєш використовувати у своїх відповідях:
+
+            - Назва бренду: AI Лаб (AI Lab) 
+            - Основна ідея: Ми освітня платформа з програмування та AI для підлітків, що поєднує інновації, креативність, технологічність та доступність. 
+            - Наша місія: "Зробити світ програмування та штучного інтелекту захопливим і зрозумілим для кожного підлітка, надаючи їм інструменти та знання для створення свого цифрового майбутнього."  Ми робимо це через короткі, інтерактивні уроки та практичні проєкти. 
+            - Наше бачення: "Стати глобальним каталізатором цифрової трансформації освіти, надихаючи мільйони підлітків по всьому світу на освоєння AI та кодування." 
+            - Наші цінності: 
+                1. Креативність та Експеримент: Заохочуємо сміливі ідеї. 
+                2. Доступність та Простота: Пояснюємо складні речі просто. 
+                3. Інноваційність та Майбутнє: Використовуємо передові технології. 
+                4. Розвиток та Ріст: Віримо в безперервне навчання. 
+                5. Спільнота: Будуємо підтримуюче середовище. 
+            - Унікальна ціннісна пропозиція (UVP): "AI Лаб перетворює складне програмування та AI на захопливі, "мікро-уроки", адаптовані для підлітків та інтегровані в їхні улюблені соцмережі." 
+            - Наші архетипи: Творець (заохочення до самовираження) та Мудрець (надання знань та експертизи). 
+
+            Твоє завдання — відповідати на запитання користувачів, спираючись на цю інформацію. Будь сучасним, привабливим для підлітків, але надійним в очах їхніх батьків. 
+        `;
+
+        // --- ЛОГІКА РОБОТИ ЧАТУ ---
+
+        // Зберігає історію діалогу для надсилання в API
+        let messages = [
+            {
+                role: 'user',
+                parts: [{ text: 'Привіт, розкажи про себе.' }],
+            },
+            {
+                role: 'model',
+                parts: [{ text: 'Привіт! Я асистент освітньої платформи "AI Лаб". Чим можу допомогти? Запитайте мене про наші курси, місію або цінності.' }],
+            }
+        ];
+
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Обробники подій
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Функція для відображення повідомлення у чаті
+        function displayMessage(sender, text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+            
+            // Проста обробка markdown для жирного тексту
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            messageElement.innerHTML = text;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        // Функція для відображення/видалення індикатора набору тексту
+        function toggleTypingIndicator(show) {
+            let indicator = document.getElementById('typing-indicator');
+            if (show) {
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    indicator.id = 'typing-indicator';
+                    indicator.classList.add('message', 'bot-message', 'typing-indicator');
+                    indicator.textContent = 'AI Лаб друкує...';
+                    chatBox.appendChild(indicator);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            } else {
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+        }
+
+
+        // Основна функція відправки повідомлення
+        async function sendMessage() {
+            const userText = userInput.value.trim();
+            if (userText === '') return;
+
+            displayMessage('user', userText);
+            userInput.value = '';
+            toggleTypingIndicator(true);
+
+            // Додаємо повідомлення користувача в історію
+            messages.push({ role: 'user', parts: [{ text: userText }] });
+
+            try {
+                const botResponse = await getGeminiResponse(userText);
+                
+                // Додаємо відповідь бота в історію
+                messages.push({ role: 'model', parts: [{ text: botResponse }] });
+
+                toggleTypingIndicator(false);
+                displayMessage('bot', botResponse);
+            } catch (error) {
+                console.error("Error:", error);
+                toggleTypingIndicator(false);
+                displayMessage('bot', 'Вибачте, сталася помилка. Спробуйте ще раз пізніше.');
+            }
+        }
+
+        // Функція для отримання відповіді від Gemini API
+        async function getGeminiResponse(userMessage) {
+            if (API_KEY === "YOUR_API_KEY") {
+                return "Будь ласка, вставте ваш справжній API-ключ у константу API_KEY у коді.";
+            }
+
+            // На цьому місці буде реальний запит до API Google
+            // Для цього потрібно імпортувати GoogleGenerativeAI з SDK:
+            // import { GoogleGenerativeAI } from "@google/generative-ai";
+            
+            // Код нижче є прикладом того, як це має виглядати
+            /*
+            const { GoogleGenerativeAI } = await import('https://esm.run/@google/generative-ai');
+            const actualGenAI = new GoogleGenerativeAI(API_KEY);
+            
+            const actualModel = actualGenAI.getGenerativeModel({
+                model: "gemini-pro",
+                systemInstruction: businessInfo,
+            });
+
+            const chat = actualModel.startChat({
+                history: messages.slice(0, -1) // Надсилаємо історію без останнього повідомлення користувача
+            });
+
+            const result = await chat.sendMessage(userMessage);
+            const response = await result.response;
+            const text = response.text();
+            
+            return text;
+            */
+            
+            // Повертаємо заглушку, оскільки реальний виклик API закоментовано
+            return new Promise(resolve => setTimeout(() => resolve("Дякую за ваше запитання! Я використовую інформацію про 'AI Лаб' для формування змістовної відповіді."), 1500));
+        }
+
+    </script>
+</body>
+</html>
