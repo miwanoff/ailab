@@ -171,7 +171,7 @@
         </form>
     </div>
 
-    <!-- Підключення Gemini API SDK -->
+     <!-- Підключення Gemini API SDK -->
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
@@ -181,8 +181,7 @@
         // TODO: Вставте свій API-ключ, отриманий з Google AI Studio.
         const API_KEY = "AIzaSyDzdFO-kRDj6NenIHjfHDWcQcS8lIfoXpA";
 
-        // 2. ІНФОРМАЦІЯ ПРО ВАШ СТАРТАП ДЛЯ БОТА (system_instruction)
-        // Цей текст надає боту контекст про ваш бізнес.
+        // 2. ІНФОРМАЦІЯ ПРО ВАШ СТАРТАП ДЛЯ БОТА
         const businessInfo = `
             Ти – дружній та експертний чат-бот-помічник для стартапу "AI Лаб". Твоя мета – відповідати на запитання користувачів, використовуючи інформацію про компанію та дотримуючись її тону голосу.
 
@@ -204,20 +203,23 @@
         `;
 
         // 3. НАЛАШТУВАННЯ МОДЕЛІ
-        // Не змінюйте, якщо не впевнені
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({ 
             model: "gemini-1.5-flash",
-            systemInstruction: businessInfo,
         });
 
         // --- КІНЕЦЬ КОНФІГУРАЦІЇ ---
 
-        // Історія чату. Починається з привітального повідомлення від бота.
-        const messages = [
+        // Історія чату для API, що містить системні інструкції.
+        // Ця частина не відображається користувачу, а лише "навчає" модель.
+        const chatHistoryForApi = [
+            {
+                role: "user",
+                parts: [{ text: `Запам'ятай інструкцію: ${businessInfo}\n\nТепер ти готовий відповідати на запитання.` }],
+            },
             {
                 role: "model",
-                parts: [{ text: "Привіт! Я помічник AI Лаб. Чим можу допомогти? Запитай мене про наші курси, місію або як почати вчитися кодувати!" }],
+                parts: [{ text: "Добре, я готовий. Я – дружній та експертний чат-бот-помічник для стартапу \"AI Лаб\"." }],
             }
         ];
 
@@ -257,12 +259,10 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Ініціалізація чату: відображення початкових повідомлень
+        // Ініціалізація чату: відображення початкового привітання
         function initializeChat() {
             chatMessages.innerHTML = '';
-            messages.forEach(msg => {
-                displayMessage(msg.role, msg.parts[0].text);
-            });
+             displayMessage('model', "Привіт! Я помічник AI Лаб. Чим можу допомогти? Запитай мене про наші курси, місію або як почати вчитися кодувати!");
         }
         
         // Обробка відправки форми
@@ -270,24 +270,25 @@
             e.preventDefault();
             const userMessage = chatInput.value.trim();
 
-            if (!userMessage || !API_KEY) {
-                if (!API_KEY) {
-                    displayMessage('model', 'Помилка: API-ключ не вказано. Будь ласка, додайте свій ключ у змінну API_KEY у коді.');
-                }
+            if (!userMessage) return;
+
+            if (!API_KEY) {
+                displayMessage('model', 'Помилка: API-ключ не вказано. Будь ласка, додайте свій ключ у змінну API_KEY у коді.');
                 return;
             }
             
-            // Додаємо повідомлення користувача в історію та відображаємо
-            messages.push({ role: "user", parts: [{ text: userMessage }] });
+            // Відображаємо повідомлення користувача
             displayMessage('user', userMessage);
             chatInput.value = '';
-            
             showLoading();
 
+            // Додаємо повідомлення користувача до історії API
+            chatHistoryForApi.push({ role: "user", parts: [{ text: userMessage }] });
+
             try {
-                // Створення сесії чату з повною історією
+                // Створення сесії чату з повною історією для API
                 const chat = model.startChat({
-                    history: messages.slice(0, -1), // Вся історія, окрім останнього повідомлення користувача
+                    history: chatHistoryForApi.slice(0, -1), // Вся історія, окрім останнього повідомлення користувача
                     generationConfig: {
                       maxOutputTokens: 1000,
                     },
@@ -297,8 +298,8 @@
                 const response = result.response;
                 const text = response.text();
 
-                // Додаємо відповідь моделі в історію та відображаємо
-                messages.push({ role: "model", parts: [{ text: text }] });
+                // Додаємо відповідь моделі до історії API та відображаємо її
+                chatHistoryForApi.push({ role: "model", parts: [{ text: text }] });
                 hideLoading();
                 displayMessage('model', text);
 
