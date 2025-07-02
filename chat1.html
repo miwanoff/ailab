@@ -1,316 +1,101 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чат | AI Лаб</title>
+    <title>Чат з асистентом AI Лаб</title>
     
-    <!-- Підключення шрифтів з Google Fonts відповідно до стайл-гайду -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* CSS-змінні для кольорів з вашого стайл-гайду */
         :root {
-            --primary-color: #6A0DAD; /* Магічний Індиго */
-            --secondary-color: #00BFFF; /* Техно-Блакитний */
-            --accent-color: #A7FF00;   /* Яскравий Лайм */
-            --neutral-light: #F5F5F5; /* Хмарний Світло-Сірий */
-            --neutral-dark: #1A1A1A;  /* Глибокий Космічний Сірий */
+            --primary-indigo: #6A0DAD;
+            --secondary-blue: #00BFFF;
+            --accent-lime: #A7FF00;
+            --neutral-light-gray: #F5F5F5;
+            --neutral-dark-gray: #1A1A1A;
             --font-headings: 'Montserrat', sans-serif;
             --font-body: 'Open Sans', sans-serif;
+            --line-height-body: 1.6em;
         }
-
-        /* Загальні стилі */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: var(--font-body);
-            background-color: var(--neutral-light);
-            margin: 0;
+            background-color: var(--neutral-dark-gray);
+            color: var(--neutral-light-gray);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: var(--neutral-dark);
+            min-height: 100vh;
+            padding: 15px;
         }
-
-        /* Головний контейнер чату */
-        #chat-container {
+        .chat-container {
             width: 100%;
             max-width: 800px;
-            height: 100%;
-            max-height: 95vh;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 90vh;
+            background-color: #2a2a30;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            border: 1px solid var(--primary-indigo);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-
-        /* Заголовок чату */
-        #chat-header {
-            background: var(--primary-color);
-            color: white;
-            padding: 20px;
-            text-align: center;
+        .chat-header { padding: 20px; background-color: rgba(0,0,0,0.2); border-bottom: 1px solid var(--primary-indigo); }
+        .chat-header h1 {
             font-family: var(--font-headings);
-            font-weight: 700;
             font-size: 24px;
-            border-bottom: 5px solid var(--accent-color);
+            font-weight: 700;
+            color: var(--neutral-light-gray);
+            text-align: center;
         }
-        
-        #chat-header span {
-            font-weight: 500;
-            opacity: 0.8;
-            font-size: 14px;
-            display: block;
-        }
-
-        /* Область для повідомлень */
-        #chat-messages {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* Стилі для бульбашок з повідомленнями */
+        .chat-header h1 span { color: var(--secondary-blue); }
+        #chat-box { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         .message {
-            max-width: 75%;
+            max-width: 80%;
             padding: 12px 18px;
-            border-radius: 20px;
-            line-height: 1.6;
+            border-radius: 18px;
+            line-height: var(--line-height-body);
             font-size: 16px;
+            white-space: pre-wrap;
             word-wrap: break-word;
         }
-
-        /* Повідомлення користувача */
         .user-message {
-            background-color: var(--secondary-color);
-            color: white;
+            background: linear-gradient(135deg, var(--secondary-blue), #00a0cc);
+            color: var(--neutral-dark-gray);
             align-self: flex-end;
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 4px;
         }
-
-        /* Повідомлення бота */
-        .model-message {
-            background-color: var(--neutral-light);
-            color: var(--neutral-dark);
+        .bot-message {
+            background-color: var(--neutral-light-gray);
+            color: var(--neutral-dark-gray);
             align-self: flex-start;
-            border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 4px;
         }
+        .bot-message strong, .bot-message b { font-family: var(--font-headings); color: var(--primary-indigo); }
+        .bot-message a { color: var(--secondary-blue); }
         
-        .loading-indicator {
-            align-self: flex-start;
-            font-style: italic;
-            color: #888;
+        #file-preview {
+            padding: 0 20px 10px;
+            font-size: 14px;
+            color: #aaa;
+            text-align: center;
         }
-
-        /* Форма для вводу повідомлення */
-        #chat-form {
+        .chat-input-area { display: flex; padding: 20px; border-top: 1px solid var(--primary-indigo); background-color: rgba(0,0,0,0.2); gap: 15px; }
+        .input-wrapper {
+            position: relative;
             display: flex;
-            padding: 20px;
-            border-top: 1px solid #e0e0e0;
-            background-color: #fff;
-        }
-
-        #chat-input {
             flex-grow: 1;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-family: var(--font-body);
-            transition: border-color 0.3s;
-        }
-
-        #chat-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        #send-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            margin-left: 15px;
-            cursor: pointer;
-            font-size: 24px;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            transition: background-color 0.3s, transform 0.2s;
         }
-
-        #send-button:hover {
-            background-color: #580a94; /* Трохи темніший Індиго */
-            transform: scale(1.1);
-        }
-    </style>
-</head>
-<body>
-
-    <div id="chat-container">
-        <div id="chat-header">
-            AI Лаб Помічник
-            <span>Ваш гід у світі коду та AI</span>
-        </div>
-        <div id="chat-messages" aria-live="polite">
-            <!-- Повідомлення будуть додаватись сюди -->
-        </div>
-        <form id="chat-form">
-            <input type="text" id="chat-input" placeholder="Напиши своє питання..." autocomplete="off" required>
-            <button id="send-button" type="submit" aria-label="Надіслати">
-                <span>&#10148;</span>
-            </button>
-        </form>
-    </div>
-
-    <!-- Підключення Gemini API SDK -->
-<script type="module">
-    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-    const API_KEY = "AIzaSyDzdFO-kRDj6NenIHjfHDWcQcS8lIfoXpA"; // ЗАМІНІТЬ НА ВАШ КЛЮЧ
-
-    // Отримуємо доступ до HTML-елементів
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
-    const fileInput = document.getElementById('file-input');
-    const filePreview = document.getElementById('file-preview');
-    
-    let chat;
-    let selectedFile = null;
-
-    // Створюємо головну асинхронну функцію для завантаження інструкцій
-    async function initializeChat() {
-        try {
-            // Крок 1: Завантажуємо інструкції з файлу
-            const response = await fetch('instructions.txt');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const businessInfo = await response.text();
-
-            // Крок 2: Ініціалізуємо модель з отриманими інструкціями
-            const genAI = new GoogleGenerativeAI(API_KEY);
-            const model = genAI.getGenerativeModel({
-                model: "gemini-pro-vision",
-                systemInstruction: businessInfo,
-            });
-            chat = model.startChat({ history: [] });
-            
-            displayMessage('bot', '<strong>Привіт!</strong> Я асистент освітньої платформи "AI Лаб". Ви можете ставити мені запитання або додати зображення.');
-
-        } catch (e) {
-            console.error("Помилка ініціалізації API або завантаження інструкцій.", e);
-            displayMessage('bot', '<strong>Помилка!</strong> Не вдалося завантажити конфігурацію або ініціалізувати модель.');
-        }
-    }
-
-    // Обробники подій
-    sendButton.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') { sendMessage(); }
-    });
-    fileInput.addEventListener('change', (e) => {
-        selectedFile = e.target.files[0];
-        if (selectedFile) {
-            filePreview.textContent = `Обраний файл: ${selectedFile.name}`;
-        } else {
-            filePreview.textContent = '';
-        }
-    });
-
-    async function fileToGenerativePart(file) {
-        const base64EncodedDataPromise = new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result.split(',')[1]);
-            reader.readAsDataURL(file);
-        });
-        return {
-            inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
-        };
-    }
-
-    function displayMessage(sender, text) {
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        messageElement.innerHTML = text;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function toggleTypingIndicator(show) {
-        let indicator = document.getElementById('typing-indicator');
-        if (show) {
-            if (!indicator) {
-                indicator = document.createElement('div');
-                indicator.id = 'typing-indicator';
-                indicator.classList.add('message', 'bot-message', 'typing-indicator');
-                indicator.textContent = 'AI Лаб друкує...';
-                chatBox.appendChild(indicator);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        } else {
-            if (indicator) { indicator.remove(); }
-        }
-    }
-
-    async function sendMessage() {
-        const userText = userInput.value.trim();
-        if (userText === '' && !selectedFile) return;
-        if (!chat) {
-            displayMessage('bot', 'Чат не ініціалізовано. Перевірте консоль на наявність помилок.');
-            return;
-        }
-
-        toggleTypingIndicator(true);
-
-        if (selectedFile) {
-            displayMessage('user', `${userText}<br><i>(Додано файл: ${selectedFile.name})</i>`);
-        } else {
-            displayMessage('user', userText);
-        }
-
-        try {
-            const parts = [];
-            if (userText) {
-                parts.push({text: userText});
-            }
-            if (selectedFile) {
-                const imagePart = await fileToGenerativePart(selectedFile);
-                parts.push(imagePart);
-            }
-
-            const result = await chat.sendMessage(parts);
-            const response = await result.response;
-            const botResponse = response.text();
-            
-            toggleTypingIndicator(false);
-            displayMessage('bot', botResponse);
-        } catch (error) {
-            console.error("Помилка під час відправки повідомлення:", error);
-            toggleTypingIndicator(false);
-            displayMessage('bot', 'Вибачте, сталася помилка з API.');
-        } finally {
-            userInput.value = '';
-            fileInput.value = '';
-            selectedFile = null;
-            filePreview.textContent = '';
-        }
-    }
-
-    // Запускаємо ініціалізацію чату після завантаження сторінки
-    initializeChat();
-</script>
-</body>
-</html>
+        #user-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px; /* Звільняємо місце для іконки */
+            border-radius: 8px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: var(--neutral-light-gray);
+            font-family: var(--font-body);
+            font-size: 16px;
